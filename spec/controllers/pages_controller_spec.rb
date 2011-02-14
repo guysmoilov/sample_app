@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe PagesController do
   render_views
+  
+  before(:each) do
+    #Code to do before each test
+  end
 
   describe "GET 'home'" do
     it "should be successful" do
