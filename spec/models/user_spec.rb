@@ -20,4 +20,9 @@ describe User do
     no_email_user.should_not be_valid
   end
   
+  it "should limit name length to 50 chars" do
+    long_name_user = User.new(@attr.merge(:name => 'a' * 51))
+    long_name_user.should_not be_valid
+  end
+  
 end
