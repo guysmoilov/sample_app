@@ -12,13 +12,21 @@
 
 class User < ActiveRecord::Base
   
-  attr_accessible :name, :email
+  attr_accessor :password
+  attr_accessible :name, :email, :password, :password_confirmation
 
-  validates :name,  :presence => true,
-                    :length   => {:maximum => 50}
-                    
-  validates :email, :presence => true,
-                    :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i},
-                    :uniqueness => {:case_sensitive => false}
+  validates :name,
+    :presence => true,
+    :length   => {:maximum => 50}
+
+  validates :email,
+    :presence => true,
+    :format => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i},
+    :uniqueness => {:case_sensitive => false}
+
+  validates :password,
+    :length => {:within => 6..40},
+    :confirmation => true,
+    :presence => true
   
 end
