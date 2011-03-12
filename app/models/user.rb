@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
     :uniqueness => {:case_sensitive => false}
 
   validates :password,
-    :length => {:within => 6..40},
+    :length => {:in => 6..40},
     :confirmation => true,
     :presence => true
   
