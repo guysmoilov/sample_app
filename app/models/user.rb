@@ -29,4 +29,18 @@ class User < ActiveRecord::Base
     :confirmation => true,
     :presence => true
   
+  
+  before_save :encrypt_password
+  
+  private
+    
+    def encrypt_password
+      self.encrypted_password = encrypt(self.password)
+    end
+    
+    def encrypt(string)
+      # Stub method
+      return string
+    end
+  
 end
