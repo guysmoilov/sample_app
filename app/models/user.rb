@@ -10,6 +10,8 @@
 #  updated_at :datetime
 #
 
+require 'digest'
+
 class User < ActiveRecord::Base
   
   attr_accessor :password
@@ -29,18 +31,34 @@ class User < ActiveRecord::Base
     :confirmation => true,
     :presence => true
   
-  
   before_save :encrypt_password
   
-  private
-    
-    def encrypt_password
-      self.encrypted_password = encrypt(self.password)
-    end
-    
-    def encrypt(string)
-      # Stub method
-      return string
-    end
+  # Compare given password to encrypted one in DB
+  def compare_pass (pass)
+    return self.encrypted_password == sha_hash("#{pass}--#{self.salt}")
+  end
   
+  protected
+    
+    # Create the encrypted password to be saved in DB
+    def encrypt_password
+      
+      # If the user is new, create a salt
+      self.make_salt if new_record?
+      
+      # Hash the salt and password to create the encrypted pass
+      self.encrypted_password = sha_hash("#{self.password}--#{self.salt}")
+      
+    end
+    
+    # Create a salt from current time and hash
+    def make_salt
+      self.salt = sha_hash(Time.now.to_s)
+    end
+    
+    # Return a SHA encryption of the argument
+    def sha_hash (arg)
+      Digest::SHA1.hexdigest(arg)
+    end
+
 end
