@@ -40,24 +40,9 @@ class User < ActiveRecord::Base
     # Check if user exists
     user = User.find_by_email(submitted_email)
     
-    if user.nil?
-      
-      # Return nil if no user found
-      return nil
-      
-    else
-      if user.compare_pass(submitted_password)
-        
-        # If the password matches, return the user
-        return user
-        
-      else
-        
-        # If not, return nil
-        return nil
-        
-      end
-    end
+    return nil if user.nil?
+    return user if user.compare_pass(submitted_password)
+    
   end
   
   # Compare given password to encrypted one in DB
