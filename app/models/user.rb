@@ -33,6 +33,33 @@ class User < ActiveRecord::Base
   
   before_save :encrypt_password
   
+  # Static method for identifying users by email and password,
+  # returns the user if successful, nil if no user found or pass doesn't match.
+  def User.authenticate (submitted_email, submitted_password)
+    
+    # Check if user exists
+    user = User.find_by_email(submitted_email)
+    
+    if user.nil?
+      
+      # Return nil if no user found
+      return nil
+      
+    else
+      if user.compare_pass(submitted_password)
+        
+        # If the password matches, return the user
+        return user
+        
+      else
+        
+        # If not, return nil
+        return nil
+        
+      end
+    end
+  end
+  
   # Compare given password to encrypted one in DB
   def compare_pass (pass)
     return self.encrypted_password == sha_hash("#{pass}--#{self.salt}")

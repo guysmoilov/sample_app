@@ -112,4 +112,25 @@ describe User do
     
   end
   
+  describe "authentication" do
+    
+    before (:each) do
+      @user = User.create!(@attr)
+    end
+    
+    it "should authenticate with valid email and matching password" do
+      auth_user = User.authenticate(@attr[:email], @attr[:password])
+      auth_user.should == @user
+    end
+    
+    it "should return nil if email doesn't exist" do
+      User.authenticate("WRONG@no.com", @attr[:password]).should be_nil
+    end
+    
+    it "should return nil if password doesn't match" do
+      User.authenticate(@attr[:email], "WRONGPASS").should be_nil
+    end
+    
+  end
+  
 end
