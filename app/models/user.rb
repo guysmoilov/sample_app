@@ -40,7 +40,6 @@ class User < ActiveRecord::Base
     
     # Check if user exists
     user = User.find_by_email(submitted_email)
-    
     return nil if user.nil?
     return user if user.compare_pass(submitted_password)
     
@@ -66,12 +65,12 @@ class User < ActiveRecord::Base
     
     # Create a salt from current time and hash
     def make_salt
-      self.salt = sha_hash(Time.now.to_s)
+      self.salt = sha_hash("#(Time.now.to_s)--#(self.password)")
     end
     
     # Return a SHA encryption of the argument
     def sha_hash (arg)
-      Digest::SHA1.hexdigest(arg)
+      Digest::SHA2.hexdigest(arg)
     end
 
 end
